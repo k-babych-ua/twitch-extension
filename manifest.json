@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+    "name": "Twitch Moderator Extention",
+    "version": "1.0",
+  
+    "description": "---",
+  
+    "content_scripts": [
+      {
+        "matches": ["*://*.twitch.tv/moderator/*"],
+        "js": ["src/index.js"]
+      }
+    ]
+  }
+  
