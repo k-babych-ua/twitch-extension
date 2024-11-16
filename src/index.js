@@ -1,48 +1,26 @@
-const communityDrawer = document.getElementById("community-drawer");
 let isCommunityDrawerUpdated = false;
 
-if (communityDrawer) {
-    console.log("Found community drawer");
+log("Loaded");
 
-    const config = { attributes: false, childList: true, subtree: true };
+document.onreadystatechange = () => {
+    if (document.readyState !== "complete")
+        return;
+    
+    loadCommunityDrawer();
+    loadChat();
+};
 
-    const callback = (mutationList, observer) => {
-        for (const mutation of mutationList) {
-            console.log(`Community drawer mutation: ${mutation.type}`);
+const loadChat = () => {
+    //Appends link-icons to nicknames in the chat
+    const chat = document.getElementsByClassName("chat-scrollable-area__message-container")[0];
 
-            //InjectLayout-sc-1i43xsx-0 cXFDOs tw-image tw-image-avatar
-            //Layout-sc-1xcs6mc-0 hJAUID viewer-card-mod-logs
-            if (mutation.addedNodes?.length > 0 &&
-                mutation.addedNodes[0].classList?.contains("user-details")) {
-                if (isCommunityDrawerUpdated)
-                    return;
+    //Wait for community drawer to be loaded
+    if (!chat) {
+        setTimeout(loadChat, 1000);
+        return;
+    }
 
-                setTimeout(() => {
-                    const cardEl = document.getElementsByClassName("viewer-card-header__display-name")[0];
-                    if (cardEl) {
-                        console.log(`Community drawer mutation, found card`);
-
-                        const username = cardEl.getElementsByClassName("tw-link")[0]?.innerText;
-
-                        username && appendLink(cardEl, username);
-                        isCommunityDrawerUpdated = true;
-                    }
-                }, 500);
-
-            }
-            else if (mutation.removedNodes?.length > 0 &&
-                mutation.removedNodes[0].classList?.contains("user-details")) {
-                isCommunityDrawerUpdated = false;
-            }
-        }
-    };
-
-    new MutationObserver(callback).observe(communityDrawer, config);
-}
-
-//Appends link-icons to nicknames in the chat
-const chat = document.getElementsByClassName("chat-scrollable-area__message-container")[0];
-if (chat) {
+    log("Found chat");
     const config = { attributes: false, childList: true, subtree: false };
 
     const callback = (mutationList, observer) => {
@@ -59,6 +37,49 @@ if (chat) {
     for (let chatline of chat.children) {
         appendLinkImage(chatline);
     }
+}
+
+const loadCommunityDrawer = () => {
+    const communityDrawer = document.getElementById("community-drawer");
+
+    //Wait for community drawer to be loaded
+    if (!communityDrawer) {
+        setTimeout(loadCommunityDrawer, 1000);
+        return;
+    }
+
+    log("Found community drawer");
+
+    const config = { attributes: false, childList: true, subtree: true };
+
+    const callback = (mutationList, observer) => {
+        for (const mutation of mutationList) {
+            //InjectLayout-sc-1i43xsx-0 cXFDOs tw-image tw-image-avatar
+            //Layout-sc-1xcs6mc-0 hJAUID viewer-card-mod-logs
+            if (mutation.addedNodes?.length > 0 &&
+                mutation.addedNodes[0].classList?.contains("user-details")) {
+                if (isCommunityDrawerUpdated)
+                    return;
+
+                setTimeout(() => {
+                    const cardEl = document.getElementsByClassName("viewer-card-header__display-name")[0];
+                    if (cardEl) {
+                        const username = cardEl.getElementsByClassName("tw-link")[0]?.innerText;
+
+                        username && appendLink(cardEl, username);
+                        isCommunityDrawerUpdated = true;
+                    }
+                }, 500);
+
+            }
+            else if (mutation.removedNodes?.length > 0 &&
+                mutation.removedNodes[0].classList?.contains("user-details")) {
+                isCommunityDrawerUpdated = false;
+            }
+        }
+    };
+
+    new MutationObserver(callback).observe(communityDrawer, config);
 }
 
 //Appends a link with a given username to the provided element
@@ -100,3 +121,7 @@ function getLinkElement(username, innerText) {
 
     return a;
 };
+
+function log(message) {
+    console.log(`Twitch Moderator Extention: ${message}`);
+}
