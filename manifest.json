@@ -1,15 +1,20 @@
 {
     "manifest_version": 2,
     "name": "Twitch Moderator Extention",
-    "version": "1.0.1",
+    "version": "1.0.2",
   
     "description": "Adds links to artemiano.top website in moderator view",
   
     "content_scripts": [
       {
         "matches": ["*://*.twitch.tv/moderator/*"],
-        "js": ["src/index.js"]
+        "js": ["src/apiService.js","src/index.js"]
       }
+    ],
+
+    "permissions": [
+      "webRequest", 
+      "https://twitch-followers-api.azurewebsites.net/*"
     ]
   }
   
