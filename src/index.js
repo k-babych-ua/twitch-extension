@@ -1,15 +1,5 @@
 let isCommunityDrawerUpdated = false;
 
-log("Loaded");
-
-document.onreadystatechange = () => {
-    if (document.readyState !== "complete")
-        return;
-    
-    loadCommunityDrawer();
-    loadChat();
-};
-
 const loadChat = () => {
     //Appends link-icons to nicknames in the chat
     const chat = document.getElementsByClassName("chat-scrollable-area__message-container")[0];
@@ -67,6 +57,8 @@ const loadCommunityDrawer = () => {
                         const username = cardEl.getElementsByClassName("tw-link")[0]?.innerText;
 
                         username && appendLink(cardEl, username);
+                        username && appendUserOverview(cardEl, username);
+
                         isCommunityDrawerUpdated = true;
                     }
                 }, 500);
@@ -88,6 +80,17 @@ function appendLink(usernameCardElement, username) {
         const a = getLinkElement(username, "artemiano.top");
 
         usernameCardElement.appendChild(a);
+    }
+}
+
+async function appendUserOverview(usernameCardElement, username) {
+    if (usernameCardElement?.innerHTML) {
+        const overview = await getUserOverview(username);
+
+        const div = document.createElement("div");
+        div.innerHTML = `Tags: ${overview.tagsAnalytics?.totalTags} (${overview.tagsAnalytics?.greenTags} Green; ${overview.tagsAnalytics?.redTags} Red)`;
+
+        usernameCardElement.appendChild(div);
     }
 }
 
@@ -121,6 +124,37 @@ function getLinkElement(username, innerText) {
 
     return a;
 };
+
+async function getUserOverview(username) {
+    const url = `https://twitch-followers-api.azurewebsites.net/api/overview/${username}`;
+    
+    try {
+        const response = await fetch(url);
+
+        if (response.ok) {
+            return response.json();
+        }
+    }
+    catch (error) {
+        log(error.Message || error.message || error);
+    }
+}
+
+if (document.readyState === "complete") {
+    loadCommunityDrawer();
+    loadChat();
+}
+else {
+    document.onreadystatechange = () => {
+        if (document.readyState !== "complete")
+            return;
+        
+        loadCommunityDrawer();
+        loadChat();
+    };
+}
+
+log("Loaded");
 
 function log(message) {
     console.log(`Twitch Moderator Extention: ${message}`);

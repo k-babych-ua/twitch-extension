@@ -8,7 +8,7 @@
     "content_scripts": [
       {
         "matches": ["*://*.twitch.tv/moderator/*"],
-        "js": ["src/apiService.js","src/index.js"]
+        "js": ["src/index.js"]
       }
     ],
 
