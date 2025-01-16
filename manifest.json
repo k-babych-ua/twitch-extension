@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Twitch Moderator Extention",
-    "version": "1.0.2",
+    "version": "1.0.3",
   
     "description": "Adds links to artemiano.top website in moderator view",
   
