@@ -87,10 +87,15 @@ async function appendUserOverview(usernameCardElement, username) {
     if (usernameCardElement?.innerHTML) {
         const overview = await getUserOverview(username);
 
-        const div = document.createElement("div");
-        div.innerHTML = `Tags: ${overview.tagsAnalytics?.totalTags} (${overview.tagsAnalytics?.greenTags} Green; ${overview.tagsAnalytics?.redTags} Red)`;
+        const tagsDiv = document.createElement("div");
+        tagsDiv.innerHTML = `Tags: ${overview.tagsAnalytics?.totalTags} (${overview.tagsAnalytics?.greenTags} good; ${overview.tagsAnalytics?.redTags} bad)`;
 
-        usernameCardElement.appendChild(div);
+        usernameCardElement.appendChild(tagsDiv);
+
+        const followsTag = document.createElement("div");
+        followsTag.innerHTML = `Follows: ${overview.followingAnalytics?.totalFollowings} (${overview.followingAnalytics.greenFollowings} good; ${overview.followingAnalytics.redFollowings} bad; ${overview.followingAnalytics.mixed} mixed)`;
+
+        usernameCardElement.appendChild(followsTag);
     }
 }
 
