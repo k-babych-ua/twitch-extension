@@ -88,12 +88,12 @@ async function appendUserOverview(usernameCardElement, username) {
         const overview = await getUserOverview(username);
 
         const tagsDiv = document.createElement("div");
-        tagsDiv.innerHTML = `Tags: ${overview.tagsAnalytics?.totalTags} (${overview.tagsAnalytics?.greenTags} good; ${overview.tagsAnalytics?.redTags} bad)`;
+        tagsDiv.textContent = `Tags: ${overview.tagsAnalytics?.totalTags} (${overview.tagsAnalytics?.greenTags} good; ${overview.tagsAnalytics?.redTags} bad)`;
 
         usernameCardElement.appendChild(tagsDiv);
 
         const followsTag = document.createElement("div");
-        followsTag.innerHTML = `Follows: ${overview.followingAnalytics?.totalFollowings} (${overview.followingAnalytics.greenFollowings} good; ${overview.followingAnalytics.redFollowings} bad; ${overview.followingAnalytics.mixed} mixed)`;
+        followsTag.textContent = `Follows: ${overview.followingAnalytics?.totalFollowings} (${overview.followingAnalytics.greenFollowings} good; ${overview.followingAnalytics.redFollowings} bad; ${overview.followingAnalytics.mixed} mixed)`;
 
         usernameCardElement.appendChild(followsTag);
     }
