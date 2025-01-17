@@ -1,19 +1,24 @@
 {
-    "manifest_version": 3,
-    "name": "Twitch Moderator Extention",
-    "version": "1.0.4",
-  
-    "description": "Adds links to artemiano.top website in moderator view. Adds tags and user follows analytics.",
-  
-    "content_scripts": [
-      {
-        "matches": ["*://*.twitch.tv/moderator/*"],
-        "js": ["src/index.js"]
-      }
-    ],
-
-    "host_permissions": [
-      "https://twitch-followers-api.azurewebsites.net/*"
-    ]
+  "manifest_version": 3,
+  "name": "Twitch Moderator Extention",
+  "version": "1.0.5",
+  "description": "Adds links to artemiano.top website in moderator view. Adds tags and user follows analytics.",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.twitch.tv/moderator/*"
+      ],
+      "js": [
+        "src/index.js"
+      ]
+    }
+  ],
+  "host_permissions": [
+    "https://twitch-followers-api.azurewebsites.net/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{9a5ff50d-5d9b-4bd8-ad6a-185a1f6c03af}"
+    }
   }
-  
+}
