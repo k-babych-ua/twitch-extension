@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Twitch Moderator Extention",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Adds links to artemiano.top website in moderator view. Adds tags and user follows analytics.",
   "content_scripts": [
     {
@@ -20,5 +20,11 @@
     "gecko": {
       "id": "{9a5ff50d-5d9b-4bd8-ad6a-185a1f6c03af}"
     }
+  },
+  "icons": {
+    "16": "src/img/icon16.png",
+    "32": "src/img/icon32.png",
+    "48": "src/img/icon48.png",
+    "128": "src/img/icon128.png"
   }
 }
