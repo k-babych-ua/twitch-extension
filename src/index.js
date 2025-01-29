@@ -1,5 +1,7 @@
 let isCommunityDrawerUpdated = false;
 
+let localData = {};
+
 const loadChat = () => {
     //Appends link-icons to nicknames in the chat
     const chat = document.getElementsByClassName("chat-scrollable-area__message-container")[0];
@@ -85,7 +87,7 @@ function appendLink(usernameCardElement, username) {
 
 async function appendUserOverview(usernameCardElement, username) {
     if (usernameCardElement?.innerHTML) {
-        const overview = await getUserOverview(username);
+        const overview = await getOrFetchUserOverview(username);
 
         const tagsDiv = document.createElement("div");
         tagsDiv.textContent = `Tags: ${overview.tagsAnalytics?.totalTags} (${overview.tagsAnalytics?.greenTags} good; ${overview.tagsAnalytics?.redTags} bad)`;
@@ -130,7 +132,15 @@ function getLinkElement(username, innerText) {
     return a;
 };
 
-async function getUserOverview(username) {
+async function getOrFetchUserOverview(username) {
+    if (!localData[username]) {
+        localData[username] = await fetchUserOverview(username);
+    }
+
+    return localData[username];
+}
+
+async function fetchUserOverview(username) {
     const url = `https://twitch-followers-api.azurewebsites.net/api/overview/${username}`;
     
     try {
