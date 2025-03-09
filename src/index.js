@@ -69,16 +69,29 @@ const loadCommunityDrawer = () => {
 }
 
 function processUserDetails(userDetails, timeout = 500){
-    setTimeout(() => {
+    setTimeout(async () => {
         const cardEl = userDetails.getElementsByClassName("viewer-card-header__display-name")[0];
         if (cardEl) {
             const username = cardEl.getElementsByClassName("tw-link")[0]?.innerText;
 
             if (username) {
                 username && appendLink(cardEl, username);
-                username && appendUserOverview(cardEl, username);
 
-                isCommunityDrawerUpdated = true;
+                const div = document.createElement("div");
+                div.textContent = "Loading...";
+                cardEl.appendChild(div);
+
+                try {
+                    username && await appendUserOverview(cardEl, username);
+
+                    isCommunityDrawerUpdated = true;
+                }
+                catch (error) {
+                    log(`Error happend trying to append user overview: ${error?.Message || error?.message || error}`);
+                }
+                finally {
+                    div.remove();
+                }
             }
             else {
                 log("missing username, retrying");
