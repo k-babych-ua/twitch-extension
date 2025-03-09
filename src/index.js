@@ -48,22 +48,14 @@ const loadCommunityDrawer = () => {
         for (const mutation of mutationList) {
             //InjectLayout-sc-1i43xsx-0 cXFDOs tw-image tw-image-avatar
             //Layout-sc-1xcs6mc-0 hJAUID viewer-card-mod-logs
-            if (mutation.addedNodes?.length > 0 &&
-                mutation.addedNodes[0].classList?.contains("user-details")) {
+            const userDetails = mutation.addedNodes[0];
+            if (userDetails && userDetails.classList?.contains("user-details")) {
+                log("Found user-details");
+                
                 if (isCommunityDrawerUpdated)
                     return;
 
-                setTimeout(() => {
-                    const cardEl = document.getElementsByClassName("viewer-card-header__display-name")[0];
-                    if (cardEl) {
-                        const username = cardEl.getElementsByClassName("tw-link")[0]?.innerText;
-
-                        username && appendLink(cardEl, username);
-                        username && appendUserOverview(cardEl, username);
-
-                        isCommunityDrawerUpdated = true;
-                    }
-                }, 500);
+                processUserDetails(userDetails, 250);
 
             }
             else if (mutation.removedNodes?.length > 0 &&
@@ -74,6 +66,26 @@ const loadCommunityDrawer = () => {
     };
 
     new MutationObserver(callback).observe(communityDrawer, config);
+}
+
+function processUserDetails(userDetails, timeout = 500){
+    setTimeout(() => {
+        const cardEl = userDetails.getElementsByClassName("viewer-card-header__display-name")[0];
+        if (cardEl) {
+            const username = cardEl.getElementsByClassName("tw-link")[0]?.innerText;
+
+            if (username) {
+                username && appendLink(cardEl, username);
+                username && appendUserOverview(cardEl, username);
+
+                isCommunityDrawerUpdated = true;
+            }
+            else {
+                log("missing username, retrying");
+                processUserDetails(userDetails, timeout * 2);
+            }
+        }
+    }, timeout);
 }
 
 //Appends a link with a given username to the provided element
