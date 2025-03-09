@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Twitch Moderator Extension",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Adds links to artemiano.top website in moderator view. Adds tags and user follows analytics.",
   "content_scripts": [
     {
